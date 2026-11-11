@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Трекер прогресса · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f5f4f2;
+    --surface: #ffffff;
+    --ink: #1c1c1c;
+    --muted: #6f6f6f;
+    --line: #dddad5;
+    --accent: #001aff;
+    --accent-soft: #e9ebff;
+    --done: #146c43;
+    --done-soft: #e3f3ea;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --bg-soft: #191919;
+    --surface: #1b1b1b;
+    --ink: #f2f1ee;
+    --muted: #9c9c9c;
+    --line: #333333;
+    --accent: #5b73ff;
+    --accent-soft: #202650;
+    --done: #4cbf85;
+    --done-soft: #163326;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212;
+      --bg-soft: #191919;
+      --surface: #1b1b1b;
+      --ink: #f2f1ee;
+      --muted: #9c9c9c;
+      --line: #333333;
+      --accent: #5b73ff;
+      --accent-soft: #202650;
+      --done: #4cbf85;
+      --done-soft: #163326;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-display);
+    line-height: 1.4;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: clamp(24px, 5vw, 64px) clamp(18px, 5vw, 32px) 100px; }
+
+  header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4vw, 40px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 17px; max-width: 56ch; margin: 14px 0 0; }
+
+  .reset-btn {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* --- overview strip --- */
+  .overview { margin-top: 44px; display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+  .panel { border: 1px solid var(--line); background: var(--surface); padding: 22px 24px; }
+  .panel h2 { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 18px; font-weight: 600; }
+
+  /* radial path map, matching the presentation's compass slide */
+  .radial { position: relative; width: 100%; max-width: 340px; margin: 18px auto 0; aspect-ratio: 1 / 0.84; }
+  .radial svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .rnode { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 4px; width: 96px; }
+  .rnode .circle {
+    width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 12px; color: var(--muted);
+    cursor: pointer; transition: transform .15s ease;
+  }
+  .rnode .circle:hover { transform: scale(1.12); border-color: var(--accent); color: var(--accent); }
+  .rnode .circle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rnode.done .circle { background: var(--done); border-color: var(--done); color: #fff; }
+  .rnode.now .circle { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .rnode .rt { font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); text-align: center; line-height: 1.3; }
+  .rnode.done .rt { color: var(--done); }
+  .rnode.now .rt { color: var(--accent); font-weight: 600; }
+  .radial-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+  .layers { display: flex; flex-direction: column; gap: 8px; }
+  .layer-row { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 12px; padding: 9px 12px; border: 1px solid var(--line); font-size: 13px; }
+  .layer-row .rn { font-family: var(--font-serif); color: var(--muted); }
+  .layer-row .st { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .layer-row.done { border-color: var(--done); background: var(--done-soft); }
+  .layer-row.done .rn, .layer-row.done .st { color: var(--done); }
+  .layer-row.partial { border-color: var(--accent); }
+  .layer-row.partial .st { color: var(--accent); }
+
+  /* --- meeting cards --- */
+  .meetings { margin-top: 44px; display: flex; flex-direction: column; gap: 14px; }
+  .meeting {
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .meeting-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .meeting-num { font-family: var(--font-serif); font-size: 26px; color: var(--muted); width: 40px; flex: none; }
+  .meeting.complete .meeting-num { color: var(--done); }
+  .meeting-title { flex: 1 1 auto; min-width: 140px; display: flex; flex-direction: column; gap: 4px; }
+  .meeting-title .name { display: block; font-weight: 600; font-size: 16px; }
+  .meeting-title .tags { display: block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .meeting-status {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    white-space: nowrap;
+    flex: none;
+    margin-left: 56px;
+  }
+  @media (min-width: 420px) { .meeting-status { margin-left: 0; } }
+  .meeting.complete .meeting-status { border-color: var(--done); color: var(--done); background: var(--done-soft); }
+  .meeting.partial .meeting-status { border-color: var(--accent); color: var(--accent); }
+  .chev { font-family: var(--font-serif); font-size: 18px; color: var(--muted); transition: transform .2s; flex: none; }
+  .meeting.open .chev { transform: rotate(90deg); }
+
+  .meeting-body { display: none; padding: 0 22px 22px; border-top: 1px solid var(--line); }
+  .meeting.open .meeting-body { display: block; padding-top: 16px; }
+
+  .item { display: grid; grid-template-columns: 20px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .item:first-child { border-top: none; }
+  .item input[type="checkbox"] { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--done); cursor: pointer; }
+  .item label { font-size: 14px; cursor: pointer; }
+  .item label b { display: block; font-weight: 600; margin-bottom: 2px; }
+  .item label small { color: var(--muted); font-size: 12.5px; }
+
+  .materials { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .materials .m-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .materials a { color: var(--accent); text-decoration: none; }
+  .materials a:hover { text-decoration: underline; }
+  .materials .m-list { display: flex; flex-direction: column; gap: 6px; }
+
+  /* --- link card to the separate self-diagnostic page --- */
+  .diag-card {
+    margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    border: 1px solid var(--line); background: var(--surface); padding: clamp(20px, 4vw, 30px);
+    text-decoration: none; color: var(--ink);
+  }
+  .diag-card:hover { border-color: var(--accent); }
+  .diag-card h2 { margin: 0; font-size: 17px; font-weight: 600; }
+  .diag-card-arrow { font-family: var(--font-serif); font-size: 22px; color: var(--accent); flex: none; }
+
+  .foot-note { margin-top: 40px; font-size: 12px; color: var(--muted); max-width: 60ch; }
+  .theme-toggle {
+    position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px;
+  }
+</style>
+<style>html,body{margin:0}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Цифровая команда компании</div>
+      <h1>Трекер прогресса</h1>
+      <p class="lede">Отмечай выполненную домашку по каждой встрече. Всё сохраняется в этом браузере - никуда не отправляется.</p>
+    </div>
+    <button class="reset-btn" id="resetBtn">Сбросить всё</button>
+  </header>
+
+  <div class="overview">
+    <div class="panel">
+      <h2>Карта пути</h2>
+      <div class="radial" id="pathRadial"></div>
+      <p class="radial-hint">Нажми на кружок, чтобы отметить, где ты сейчас</p>
+    </div>
+    <div class="panel">
+      <h2>5 слоёв личной ОС</h2>
+      <div class="layers" id="layerRows"></div>
+    </div>
+  </div>
+
+  <div class="meetings" id="meetings"></div>
+
+  <a class="diag-card" href="self-check.html">
+    <div>
+      <h2>Самодиагностика · Встречи 5-6</h2>
+      <p class="lede" style="margin:8px 0 0;">Пять уровней, до 5 баллов каждый, со сравнением встречи 5 и встречи 6 - теперь отдельной страницей.</p>
+    </div>
+    <span class="diag-card-arrow">&rarr;</span>
+  </a>
+
+  <p class="foot-note">Данные хранятся локально в этом браузере (localStorage). Открыл трекер на другом устройстве - начинай заново там; ничего не синхронизируется на сервер.</p>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+
+<script>
+(function () {
+  var STORE_KEY = "цк-tracker-v1";
+
+  var LAYERS = [
+    { rn: "I", name: "Мозг", meeting: "Встреча 1" },
+    { rn: "II", name: "Память", meeting: "Встреча 2" },
+    { rn: "III", name: "Правила", meeting: "Встреча 1" },
+    { rn: "IV", name: "Руки", meeting: "Встреча 3" },
+    { rn: "V", name: "Экран", meeting: "Встреча 3" }
+  ];
+
+  // short outcome tag per meeting, shown on the radial path map
+  var RADIAL_TAG = ["Мозг+Правила", "Память", "Руки+Экран", "Ресерч", "Команда", "Итоги"];
+  var RADIAL_POS = [
+    { x: 50, y: 13 },
+    { x: 81, y: 30 },
+    { x: 81, y: 63 },
+    { x: 50, y: 80 },
+    { x: 19, y: 63 },
+    { x: 19, y: 30 }
+  ];
+
+  var MEETINGS = [
+    {
+      id: "m1", title: "Настройка Claude и онбординг", tags: "Мозг · Правила",
+      items: [
+        { id: "m1i1", text: "Установка Claude Code", hint: "Проверка: открывается пустой чат в рабочей папке курса" },
+        { id: "m1i2", text: "Онбординг пройден", hint: "Проверка: файл-инструкция создан, новая сессия верно отвечает на \"какая у меня роль\"" },
+        { id: "m1i3", text: "Скилл daily-log установлен", hint: "Проверка: команда daily-log доступна и один раз запущена" },
+        { id: "m1i4", text: "Домашка: daily-log каждый день", hint: "Проверка: новый файл в notes/ после каждого запуска" }
+      ],
+      links: [
+        { label: "ссылка на скилл онбординга", url: "https://drive.google.com/file/d/1iyFrgM_mOPuTV0KIkcnwRs-wDK6a41rX/view?usp=sharing" },
+        { label: "ссылка на скилл daily-log", url: "https://drive.google.com/file/d/1jvlJ0RG1c3uKwoudecB3XEqKa0alB429/view?usp=sharing" },
+        { label: "ссылка на словарь терминов курса", url: "https://drive.google.com/file/d/19w0kW6mK4EcgL-cKr4TF71bxhkthF9kW/view?usp=sharing" },
+        { label: "ссылка на FAQ встречи 1", url: "https://drive.google.com/file/d/1dMcGfjhjXLJM-V_JVbAXQkpnKhxWOR0K/view?usp=sharing" }
+      ]
+    },
+    {
+      id: "m2", title: "База знаний компании", tags: "Память · Правила+",
+      items: [
+        { id: "m2i1", text: "20+ атомарных заметок в базе", hint: "Проверка: граф в Obsidian показывает связи, не изолированные точки" },
+        { id: "m2i2", text: "daily-log продолжается без пропусков", hint: "Проверка: файлы появляются каждый день" },
+        { id: "m2i3", text: "Docker Desktop установлен", hint: "Проверка: приложение стоит и хотя бы раз открывалось" }
+      ],
+      links: [
+        { label: "ссылка на промпт структуры vault", url: "https://drive.google.com/file/d/1jhDA0b0iylMpG-3ZGxQ72RDL-2EMgH4_/view?usp=sharing" },
+        { label: "ссылка на промпт скилла atomize", url: "https://drive.google.com/file/d/1vp0mPO_OGIdumCVvG5bXL5emUgS9K9Ht/view?usp=drive_link" },
+        { label: "ссылка на FAQ встречи 2", url: "https://drive.google.com/file/d/1n-uli49WGCogpFFDFfQU4Sl2z9_ygCd4/view?usp=sharing" }
+      ]
+    },
+    {
+      id: "m3", title: "Автоматизация календаря, почты, Telegram", tags: "Руки · Экран",
+      items: [
+        { id: "m3i1", text: "Дайджест на Schedule Task работает сам", hint: "Проверка: сработал по расписанию, не через Run Now" },
+        { id: "m3i5", text: "WhatsApp подключён через Unipile", hint: "Проверка: на запрос \"покажи мои последние чаты в WhatsApp\" приходят реальные чаты" },
+        { id: "m3i6", text: "Расширение Claude в Chrome установлено", hint: "Проверка: Claude выполнил хотя бы одну задачу на сайте" },
+        { id: "m3i7", text: "AnySite подключён", hint: "Проверка: получен брифинг по реальному человеку - фон, интересы, 3 темы для разговора" },
+        { id: "m3i3", text: "daily-log продолжается" },
+        { id: "m3i4", text: "Atomize продолжается" }
+      ],
+      links: [
+        { label: "ссылка на скилл telegram-mcp-setup", url: "https://drive.google.com/file/d/1KF0_bfILuCNYQ7ho5q6R5wHEDj1dWHnp/view?usp=sharing" },
+        { label: "ссылка на инструкцию подключения Unipile", url: "https://drive.google.com/file/d/1UssNG6jDfpLL7EetSQsKzuXRu3KRpMPR/view?usp=drive_link" },
+        { label: "ссылка на расширение Claude для Chrome", url: "https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn" },
+        { label: "ссылка на FAQ встречи 3", url: "https://drive.google.com/file/d/1LdZ_Ch2pv5n8YeOimvFzTB3vQBdh6o8J/view?usp=drive_link" }
+      ]
+    },
+    {
+      id: "m4", title: "ИИ-исследователь", tags: "Усиление: Мозг · Руки",
+      items: [
+        { id: "m4i1", text: "Researcher-агент кастомизирован под свой домен", hint: "Проверка: названы источники и хотя бы один отмеченный пробел" },
+        { id: "m4i2", text: "Материал реально опубликован или отправлен коллеге", hint: "Не остался только в файле" }
+      ],
+      links: [
+        { label: "ссылка на шаблон researcher-агента", url: "https://drive.google.com/file/d/1mC3no8ZJOZQCrOVBwRBAu0hgBuyrOylV/view?usp=drive_link" },
+        { label: "ссылка на инструкцию подключения Unipile", url: "https://drive.google.com/file/d/1UssNG6jDfpLL7EetSQsKzuXRu3KRpMPR/view?usp=drive_link" },
+        { label: "ссылка на шаблоны поста", url: "https://drive.google.com/file/d/1-kj7wWVAtLwPIzUTjTdaCbi9wvsRPrZo/view?usp=drive_link" },
+        { label: "ссылка на FAQ встречи 4", url: "https://drive.google.com/file/d/1TPY-4kMwyv1WLf7qeFTI0-V92s8dbu1-/view?usp=drive_link" }
+      ]
+    },
+    {
+      id: "m5", title: "Цифровая команда", tags: "Все 5 слоёв в системе",
+      items: [
+        { id: "m5i1", text: "Контракт зафиксирован письменно", hint: "\"Моя система будет [действие] каждый [период] в [время] 10 из следующих 14 дней\"" },
+        { id: "m5i2", text: "Есть хотя бы один автоматический прогон без ручного запуска" }
+      ],
+      links: [
+        { label: "ссылка на чек-лист самодиагностики", url: "self-check.html" },
+        { label: "ссылка на шаблон файла хука", url: "https://drive.google.com/file/d/11j96RMht3Z0vmiPlnEY7atGpNaJrhcAA/view?usp=drive_link" },
+        { label: "ссылка на модель найма цифрового сотрудника", url: "https://drive.google.com/file/d/13bEcVQmP2yCQH1bc9ADHRlFjOWIAYeyC/view?usp=drive_link" },
+        { label: "ссылка на FAQ встречи 5", url: "https://drive.google.com/file/d/10-4q9PwRBvDQt5_PGFEDnSpXc1s0AtgK/view?usp=drive_link" }
+      ]
+    },
+    {
+      id: "m6", title: "Разбор и ответы", tags: "Финал",
+      items: [
+        { id: "m6i1", text: "Повторный чек-лист самодиагностики пройден", hint: "Отдельная страница - ссылка внизу этого трекера" },
+        { id: "m6i2", text: "План внедрения зафиксирован письменно" }
+      ],
+      links: [
+        { label: "ссылка на шаблон плана внедрения", url: "plan.html" },
+        { label: "ссылка на список полезных скиллов курса", url: "https://drive.google.com/file/d/1iN3VXY-0Q-ZdVGlNko0A1yYOO95mwIFl/view?usp=drive_link" },
+        { label: "ссылка на FAQ встречи 6", url: "https://drive.google.com/file/d/1D0fwS2Mr-YXlSd1q9aB2RswoDrFrHqfB/view?usp=drive_link" }
+      ]
+    }
+  ];
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return { checks: {}, marked: [] };
+      var parsed = JSON.parse(raw);
+      return { checks: parsed.checks || {}, marked: parsed.marked || [] };
+    } catch (e) { return { checks: {}, marked: [] }; }
+  }
+
+  var state = load();
+  var openMeeting = null;
+
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function meetingDone(m) {
+    return m.items.every(function (it) { return state.checks[it.id]; });
+  }
+  function meetingPartial(m) {
+    return m.items.some(function (it) { return state.checks[it.id]; }) && !meetingDone(m);
+  }
+
+  // --- render overview ---
+  function renderPath() {
+    var el = document.getElementById("pathRadial");
+    el.innerHTML = '<svg viewBox="0 0 200 168" aria-hidden="true"><circle cx="100" cy="76" r="60" fill="none" stroke="var(--line)" stroke-width="1.2" stroke-dasharray="2 5" /></svg>';
+    var autoIdx = MEETINGS.findIndex(function (m) { return !meetingDone(m); });
+    var hasManual = state.marked.length > 0;
+    MEETINGS.forEach(function (m, i) {
+      var done = meetingDone(m);
+      var isNow = hasManual ? state.marked.indexOf(m.id) !== -1 : i === autoIdx;
+      var node = document.createElement("div");
+      node.className = "rnode" + (isNow ? " now" : done ? " done" : "");
+      node.style.left = RADIAL_POS[i].x + "%";
+      node.style.top = RADIAL_POS[i].y + "%";
+      var label = isNow ? (hasManual ? "Пройдено" : "Сейчас") : RADIAL_TAG[i];
+      node.innerHTML =
+        '<span class="circle" tabindex="0" role="button" aria-pressed="' + isNow + '" title="Отметить как пройдено">' + (i + 1) + '</span>' +
+        '<span class="rt">' + label + '</span>';
+      var circle = node.querySelector(".circle");
+      circle.addEventListener("click", function () {
+        var idx = state.marked.indexOf(m.id);
+        if (idx === -1) { state.marked.push(m.id); } else { state.marked.splice(idx, 1); }
+        save();
+        renderPath();
+      });
+      circle.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); circle.click(); }
+      });
+      el.appendChild(node);
+    });
+  }
+
+  function renderLayers() {
+    // layer state derived from meetings: m1 -> Мозг done, Правила partial (личная часть)
+    // m2 -> Память done, Правила done (add company). m3 -> Руки+Экран done.
+    var layerState = { "Мозг": "off", "Память": "off", "Правила": "off", "Руки": "off", "Экран": "off" };
+    if (meetingDone(MEETINGS[0])) { layerState["Мозг"] = "done"; layerState["Правила"] = "partial"; }
+    if (meetingDone(MEETINGS[1])) { layerState["Память"] = "done"; layerState["Правила"] = "done"; }
+    if (meetingDone(MEETINGS[2])) { layerState["Руки"] = "done"; layerState["Экран"] = "done"; }
+
+    var layersEl = document.getElementById("layerRows");
+    layersEl.innerHTML = "";
+    LAYERS.forEach(function (l) {
+      var st = layerState[l.name];
+      var row = document.createElement("div");
+      row.className = "layer-row" + (st === "done" ? " done" : st === "partial" ? " partial" : "");
+      row.innerHTML =
+        '<span class="rn">' + l.rn + '</span>' +
+        '<span>' + l.name + '</span>' +
+        '<span class="st">' + (st === "done" ? "Готово" : st === "partial" ? "Частично" : l.meeting) + '</span>';
+      layersEl.appendChild(row);
+    });
+  }
+
+  function renderOverview() {
+    renderPath();
+    renderLayers();
+  }
+
+  // --- render meetings ---
+  function renderMeetings() {
+    var wrap = document.getElementById("meetings");
+    wrap.innerHTML = "";
+    MEETINGS.forEach(function (m, idx) {
+      var done = meetingDone(m);
+      var partial = meetingPartial(m);
+      var card = document.createElement("div");
+      card.className = "meeting" + (done ? " complete" : partial ? " partial" : "") + (openMeeting === m.id ? " open" : "");
+
+      var head = document.createElement("div");
+      head.className = "meeting-head";
+      head.innerHTML =
+        '<span class="meeting-num">' + String(idx + 1).padStart(2, "0") + '</span>' +
+        '<span class="meeting-title"><span class="name">' + m.title + '</span><span class="tags">' + m.tags + '</span></span>' +
+        '<span class="meeting-status">' + (done ? "Пройдена" : partial ? "В процессе" : "Не начата") + '</span>' +
+        '<span class="chev">›</span>';
+      head.addEventListener("click", function () {
+        openMeeting = openMeeting === m.id ? null : m.id;
+        renderMeetings();
+      });
+      card.appendChild(head);
+
+      var body = document.createElement("div");
+      body.className = "meeting-body";
+      m.items.forEach(function (it) {
+        var row = document.createElement("div");
+        row.className = "item";
+        var cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.id = it.id;
+        cb.checked = !!state.checks[it.id];
+        cb.addEventListener("change", function () {
+          state.checks[it.id] = cb.checked;
+          save();
+          renderOverview();
+          renderMeetings();
+        });
+        var label = document.createElement("label");
+        label.setAttribute("for", it.id);
+        label.innerHTML = "<b>" + it.text + "</b>" + (it.hint ? "<small>" + it.hint + "</small>" : "");
+        row.appendChild(cb);
+        row.appendChild(label);
+        body.appendChild(row);
+      });
+      if (m.links && m.links.length) {
+        var materials = document.createElement("div");
+        materials.className = "materials";
+        var mLabel = document.createElement("div");
+        mLabel.className = "m-label";
+        mLabel.textContent = "Материалы встречи";
+        var mList = document.createElement("div");
+        mList.className = "m-list";
+        m.links.forEach(function (lk) {
+          var a = document.createElement("a");
+          a.href = lk.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.textContent = lk.label;
+          mList.appendChild(a);
+        });
+        materials.appendChild(mLabel);
+        materials.appendChild(mList);
+        body.appendChild(materials);
+      }
+      card.appendChild(body);
+      wrap.appendChild(card);
+    });
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (!confirm("Сбросить весь прогресс в этом браузере? Это нельзя отменить.")) return;
+    state = { checks: {}, marked: [] };
+    save();
+    renderOverview();
+    renderMeetings();
+  });
+
+  // theme toggle
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(STORE_KEY + "-theme", next); } catch (e) {}
+  });
+  try {
+    var savedTheme = localStorage.getItem(STORE_KEY + "-theme");
+    if (savedTheme) root.setAttribute("data-theme", savedTheme);
+  } catch (e) {}
+
+  renderOverview();
+  renderMeetings();
+})();
+</script>
+
+</body>
+</html>

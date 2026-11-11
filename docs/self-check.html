@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Самодиагностика · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f5f4f2;
+    --surface: #ffffff;
+    --ink: #1c1c1c;
+    --muted: #6f6f6f;
+    --line: #dddad5;
+    --accent: #001aff;
+    --accent-soft: #e9ebff;
+    --done: #146c43;
+    --done-soft: #e3f3ea;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --bg-soft: #191919;
+    --surface: #1b1b1b;
+    --ink: #f2f1ee;
+    --muted: #9c9c9c;
+    --line: #333333;
+    --accent: #5b73ff;
+    --accent-soft: #202650;
+    --done: #4cbf85;
+    --done-soft: #163326;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650; --done: #4cbf85; --done-soft: #163326;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); line-height: 1.4; }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(24px, 5vw, 64px) clamp(18px, 5vw, 32px) 100px; }
+
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 26px; }
+  .back-link:hover { color: var(--accent); }
+
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4vw, 40px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 17px; max-width: 56ch; margin: 14px 0 0; }
+
+  .diag { margin-top: 40px; border: 1px solid var(--line); background: var(--surface); padding: clamp(20px, 4vw, 34px); }
+  .diag-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+  .diag-score { text-align: right; }
+  .diag-score .num { font-family: var(--font-serif); font-size: 44px; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums; }
+  .diag-score .rank { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+  .diag-rows { display: flex; flex-direction: column; gap: 14px; }
+  .diag-row { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+  .diag-row:first-child { border-top: none; }
+  .diag-row .lbl { font-size: 14px; }
+  .diag-row .lbl b { display: block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+  .stepper { display: flex; align-items: center; gap: 10px; }
+  .stepper button {
+    width: 28px; height: 28px; border: 1px solid var(--line); background: var(--bg-soft); color: var(--ink);
+    font-family: var(--font-display); font-size: 15px; cursor: pointer; line-height: 1;
+  }
+  .stepper button:hover { border-color: var(--accent); color: var(--accent); }
+  .stepper .val { width: 24px; text-align: center; font-variant-numeric: tabular-nums; font-size: 15px; }
+
+  .rank-ladder { margin-top: 40px; display: flex; flex-direction: column; }
+  .rank-row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .rank-row:first-child { border-top: none; }
+  .rank-row.current { color: var(--ink); font-weight: 600; }
+  .rank-row .range { font-variant-numeric: tabular-nums; }
+
+  .snap-row { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--accent); color: #fff; border: none; padding: 12px 20px; cursor: pointer;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+  .snap-note { font-size: 12px; color: var(--muted); }
+
+  .snap-compare { margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 560px) { .snap-compare { grid-template-columns: 1fr; } }
+  .snap-box { border: 1px solid var(--line); padding: 16px 18px; }
+  .snap-box .t { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .snap-box .v { font-family: var(--font-serif); font-size: 26px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .snap-box.delta .v { color: var(--done); }
+
+  .reset-btn {
+    margin-top: 30px;
+    font-family: var(--font-display); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 10px 16px; cursor: pointer;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .foot-note { margin-top: 40px; font-size: 12px; color: var(--muted); max-width: 60ch; }
+  .theme-toggle {
+    position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px;
+  }
+</style>
+<style>html,body{margin:0}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back-link" href="tracker.html">&larr; К трекеру прогресса</a>
+
+  <div class="eyebrow">Цифровая команда компании · Встречи 5-6</div>
+  <h1>Самодиагностика</h1>
+  <p class="lede">Пять уровней, до 5 баллов каждый - честная оценка, не соревнование. Пройди её на встрече 5 и ещё раз на встрече 6, чтобы увидеть рост.</p>
+
+  <div class="diag">
+    <div class="diag-head">
+      <div>
+        <h2 style="margin:0 0 6px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);">Чек-лист</h2>
+        <p class="lede" style="margin:0;">Оцени себя по каждому уровню от 0 до 5.</p>
+      </div>
+      <div class="diag-score">
+        <div class="num" id="diagTotal">0/25</div>
+        <div class="rank" id="diagRank">Стажёр</div>
+      </div>
+    </div>
+
+    <div class="diag-rows" id="diagRows"></div>
+
+    <div class="snap-row">
+      <button class="btn ghost" id="saveM5">Сохранить как результат встречи 5</button>
+      <button class="btn ghost" id="saveM6">Сохранить как результат встречи 6</button>
+      <span class="snap-note" id="snapNote">Ещё не сохранено ни одного результата.</span>
+    </div>
+
+    <div class="snap-compare" id="snapCompare" style="display:none;"></div>
+
+    <button class="reset-btn" id="resetBtn">Сбросить самодиагностику</button>
+  </div>
+
+  <div class="rank-ladder" id="rankLadder"></div>
+
+  <p class="foot-note">Данные хранятся локально в этом браузере (localStorage), отдельно от трекера прогресса. Никуда не отправляются.</p>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+
+<script>
+(function () {
+  var STORE_KEY = "цк-diag-v1";
+
+  var DIAG = [
+    { id: "L1", name: "Знает тебя", hint: "файл-инструкция, цели, личность" },
+    { id: "L2", name: "Имеет источники", hint: "Telegram, почта, база знаний, браузер, календарь" },
+    { id: "L3", name: "Знает процедуры", hint: "скиллы" },
+    { id: "L4", name: "Проактивен", hint: "Schedule Task, хуки, субагенты" },
+    { id: "L5", name: "Доставляет результат", hint: "от песочницы до ежедневной публикации" }
+  ];
+
+  var RANKS = [
+    { min: 0, max: 5, name: "Стажёр" },
+    { min: 6, max: 10, name: "Младший сотрудник" },
+    { min: 11, max: 15, name: "Сотрудник" },
+    { min: 16, max: 20, name: "Старший сотрудник" },
+    { min: 21, max: 25, name: "Правая рука" }
+  ];
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return { diag: {}, snaps: {} };
+      var parsed = JSON.parse(raw);
+      return { diag: parsed.diag || {}, snaps: parsed.snaps || {} };
+    } catch (e) { return { diag: {}, snaps: {} }; }
+  }
+
+  var state = load();
+
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
+
+  function rankFor(total) {
+    for (var i = 0; i < RANKS.length; i++) {
+      if (total >= RANKS[i].min && total <= RANKS[i].max) return RANKS[i];
+    }
+    return RANKS[RANKS.length - 1];
+  }
+
+  function diagTotal() {
+    return DIAG.reduce(function (sum, d) { return sum + (state.diag[d.id] || 0); }, 0);
+  }
+
+  function renderDiag() {
+    var rowsEl = document.getElementById("diagRows");
+    rowsEl.innerHTML = "";
+    DIAG.forEach(function (d) {
+      var val = state.diag[d.id] || 0;
+      var row = document.createElement("div");
+      row.className = "diag-row";
+      row.innerHTML =
+        '<span class="lbl"><b>' + d.id + '</b>' + d.name + ' <span style="color:var(--muted);">- ' + d.hint + '</span></span>' +
+        '<span class="stepper">' +
+          '<button data-act="dec" data-id="' + d.id + '" aria-label="Меньше">-</button>' +
+          '<span class="val">' + val + '</span>' +
+          '<button data-act="inc" data-id="' + d.id + '" aria-label="Больше">+</button>' +
+        '</span>';
+      rowsEl.appendChild(row);
+    });
+
+    rowsEl.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-id");
+        var cur = state.diag[id] || 0;
+        var next = btn.getAttribute("data-act") === "inc" ? Math.min(5, cur + 1) : Math.max(0, cur - 1);
+        state.diag[id] = next;
+        save();
+        renderDiag();
+      });
+    });
+
+    var total = diagTotal();
+    var rank = rankFor(total);
+    document.getElementById("diagTotal").textContent = total + "/25";
+    document.getElementById("diagRank").textContent = rank.name;
+
+    renderRankLadder(rank);
+    renderSnaps();
+  }
+
+  function renderRankLadder(currentRank) {
+    var el = document.getElementById("rankLadder");
+    el.innerHTML = "";
+    RANKS.forEach(function (r) {
+      var row = document.createElement("div");
+      row.className = "rank-row" + (r.name === currentRank.name ? " current" : "");
+      row.innerHTML = '<span class="range">' + r.min + '-' + r.max + '</span><span>' + r.name + '</span>';
+      el.appendChild(row);
+    });
+  }
+
+  function renderSnaps() {
+    var note = document.getElementById("snapNote");
+    var compare = document.getElementById("snapCompare");
+    var m5 = state.snaps.m5;
+    var m6 = state.snaps.m6;
+
+    if (m5 == null && m6 == null) {
+      note.textContent = "Ещё не сохранено ни одного результата.";
+      compare.style.display = "none";
+      return;
+    }
+
+    note.textContent = "";
+    compare.style.display = "grid";
+    compare.innerHTML = "";
+
+    function box(label, value, cls) {
+      var el = document.createElement("div");
+      el.className = "snap-box" + (cls ? " " + cls : "");
+      el.innerHTML = '<div class="t">' + label + '</div><div class="v">' + value + '</div>';
+      return el;
+    }
+
+    compare.appendChild(box("Встреча 5", m5 != null ? m5 + "/25" : "-"));
+    compare.appendChild(box("Встреча 6", m6 != null ? m6 + "/25" : "-"));
+    var delta = (m5 != null && m6 != null) ? (m6 - m5) : null;
+    compare.appendChild(box("Рост", delta != null ? (delta >= 0 ? "+" + delta : delta) : "-", "delta"));
+  }
+
+  document.getElementById("saveM5").addEventListener("click", function () {
+    state.snaps.m5 = diagTotal();
+    save();
+    renderSnaps();
+  });
+  document.getElementById("saveM6").addEventListener("click", function () {
+    state.snaps.m6 = diagTotal();
+    save();
+    renderSnaps();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (!confirm("Сбросить самодиагностику? Это нельзя отменить.")) return;
+    state = { diag: {}, snaps: {} };
+    save();
+    renderDiag();
+  });
+
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(STORE_KEY + "-theme", next); } catch (e) {}
+  });
+  try {
+    var savedTheme = localStorage.getItem(STORE_KEY + "-theme");
+    if (savedTheme) root.setAttribute("data-theme", savedTheme);
+  } catch (e) {}
+
+  renderDiag();
+})();
+</script>
+
+</body>
+</html>
