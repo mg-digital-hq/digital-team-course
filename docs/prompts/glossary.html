@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>Словарь терминов · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+    --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+    --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  .wrap { max-width: 820px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 60ch; margin: 18px 0 0; }
+
+  .meeting-block { margin-top: 48px; }
+  .meeting-block h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+  .meeting-block .meeting-title { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 15px; margin: 0 0 18px; }
+
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 620px) { .cards { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--line); background: var(--surface); padding: 18px 20px; }
+  .card .term { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0 0 8px; }
+  .card .term::before { content: "-> "; color: var(--accent); }
+  .card .def { font-family: var(--font-serif); font-size: 14.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .theme-toggle { position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px; }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Весь курс</div>
+  <h1>Словарь терминов</h1>
+  <p class="lede">Все новые слова курса в одном месте, по встречам - если забыл, что значит термин со встречи 2, не нужно пересматривать видео заново.</p>
+
+  <div class="meeting-block">
+    <h2>Встреча 1 · Настройка Claude и онбординг</h2>
+    <div class="cards">
+      <div class="card"><div class="term">Claude Code</div><p class="def">Программа AI-помощник, которую ставишь на компьютер.</p></div>
+      <div class="card"><div class="term">Скилл</div><p class="def">Готовый промпт, который можно отправить файлом Claude и получить готовую инструкцию для регулярных действий.</p></div>
+      <div class="card"><div class="term">Файл-инструкция ("Правила")</div><p class="def">Анкета, которая рассказывает помощнику, кто ты и как с тобой общаться.</p></div>
+      <div class="card"><div class="term">Daily-log</div><p class="def">Ежедневный короткий опрос от Claude о твоём дне, 5 минут.</p></div>
+    </div>
+  </div>
+
+  <div class="meeting-block">
+    <h2>Встреча 2 · База знаний компании</h2>
+    <div class="cards">
+      <div class="card"><div class="term">Zettelkasten</div><p class="def">Метод хранения знаний маленькими карточками-заметками со ссылками друг на друга, а не одним большим документом.</p></div>
+      <div class="card"><div class="term">Атомарная заметка</div><p class="def">Одна заметка = одна идея, короткая, своими словами.</p></div>
+      <div class="card"><div class="term">Vault (хранилище)</div><p class="def">Папка со всеми заметками, которую можно открыть в Obsidian и увидеть граф связей.</p></div>
+      <div class="card"><div class="term">Связь</div><p class="def">Ссылка между двумя заметками с объяснением, почему они связаны.</p></div>
+    </div>
+  </div>
+
+  <div class="meeting-block">
+    <h2>Встреча 3 · Автоматизация календаря, почты, Telegram</h2>
+    <div class="cards">
+      <div class="card"><div class="term">MCP</div><p class="def">Переходник, который даёт помощнику доступ к другим программам - Telegram, почте, календарю.</p></div>
+      <div class="card"><div class="term">API ID и API Hash</div><p class="def">Бесплатные коды для регистрации "приложения" в Telegram, получаешь на my.telegram.org. Сами по себе доступа к переписке не дают.</p></div>
+      <div class="card"><div class="term">Session string</div><p class="def">Код, который выдаётся после входа по номеру телефона. Фактически открытая сессия в Telegram - куда более чувствительная вещь.</p></div>
+      <div class="card"><div class="term">Триаж</div><p class="def">Сортировка входящих сообщений и писем по важности.</p></div>
+      <div class="card"><div class="term">Schedule Task</div><p class="def">Задача, которая запускается сама по расписанию.</p></div>
+      <div class="card"><div class="term">Мост WhatsApp</div><p class="def">Небольшая программа на твоём компьютере, через которую ассистент читает WhatsApp. Ставится скиллом whatsapp-mcp-setup, вход по QR.</p></div>
+      <div class="card"><div class="term">Unipile</div><p class="def">Сервис-посредник, через который на встрече 4 ассистент получает доступ к LinkedIn.</p></div>
+      <div class="card"><div class="term">Claude in Chrome</div><p class="def">Расширение для Google Chrome, через которое Claude сам работает на сайтах.</p></div>
+    </div>
+  </div>
+
+  <div class="meeting-block">
+    <h2>Встреча 4 · ИИ-исследователь</h2>
+    <div class="cards">
+      <div class="card"><div class="term">Субагент</div><p class="def">Отдельный ассистент-помощник, которого главный ассистент отправляет разобраться с одной задачей и вернуться с готовым результатом.</p></div>
+      <div class="card"><div class="term">/council</div><p class="def">Команда экспертов-субагентов, каждый даёт независимую оценку одного и того же вопроса.</p></div>
+      <div class="card"><div class="term">Источниковедение</div><p class="def">Умение понимать, какому источнику и в какой мере можно доверять.</p></div>
+    </div>
+  </div>
+
+  <div class="meeting-block">
+    <h2>Встреча 5 · Цифровая команда</h2>
+    <div class="cards">
+      <div class="card"><div class="term">Hook (хук)</div><p class="def">"Рефлекс" ассистента, который срабатывает гарантированно в нужный момент, в отличие от инструкции, которую можно забыть.</p></div>
+      <div class="card"><div class="term">Cron / Schedule Task</div><p class="def">Расписание, по которому что-то запускается само.</p></div>
+      <div class="card"><div class="term">Автономность</div><p class="def">Насколько ассистент действует сам, без твоего запроса каждый раз.</p></div>
+      <div class="card"><div class="term">Роль / Отчёт / Канал / Рабочий день</div><p class="def">Четыре части модели найма любого цифрового сотрудника.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Цифровая команда компании · Словарь по всем встречам</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-prompt-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-prompt-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+</script>

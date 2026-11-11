@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>Схема · Модель найма цифрового сотрудника · Встреча 5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+    --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+    --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 58ch; margin: 18px 0 0; }
+
+  .chain { display: flex; flex-direction: column; margin-top: 44px; }
+  .link { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); position: relative; }
+  .link:last-child { border-bottom: 1px solid var(--line); }
+  .link .rn { font-family: var(--font-display); font-weight: 700; font-size: 28px; color: var(--accent); line-height: 1; }
+  .link h3 { font-size: 18px; margin: 0 0 6px; }
+  .link p { font-family: var(--font-serif); font-size: 15px; color: var(--muted); margin: 0; line-height: 1.5; max-width: 52ch; }
+  .link .q { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: var(--accent); margin-top: 8px; }
+
+  .fill { margin-top: 24px; border: 1px solid var(--line); background: var(--surface); padding: 24px; position: relative; }
+  .fill h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .fill .field { margin-bottom: 16px; }
+  .fill .field label { display: block; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .fill .field .line {
+    border-bottom: 1px solid var(--line); min-height: 26px; padding: 4px 2px;
+    font-family: var(--font-serif); font-size: 15px; color: var(--ink);
+    outline: none; cursor: text; line-height: 1.4;
+  }
+  .fill .field .line:focus { border-bottom-color: var(--accent); }
+  .fill .field .line.is-empty::before { content: attr(data-placeholder); color: var(--muted); font-style: italic; }
+  .fill .remove-btn {
+    font-family: var(--font-display); font-size: 12px; color: var(--muted); background: none;
+    border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; cursor: pointer;
+  }
+  .fill .remove-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .add-employee-btn {
+    display: block; width: 100%; margin-top: 16px; padding: 14px; font-family: var(--font-display);
+    font-size: 14px; font-weight: 600; color: var(--accent); background: var(--accent-soft);
+    border: 1px dashed var(--accent); cursor: pointer; transition: opacity .15s;
+  }
+  .add-employee-btn:hover { opacity: 0.8; }
+  .save-hint { margin-top: 10px; font-size: 12px; color: var(--muted); text-align: center; }
+
+  .example { margin-top: 40px; }
+  .example h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+  .example .name { font-family: var(--font-serif); font-size: 15px; color: var(--muted); font-style: italic; margin-bottom: 14px; }
+  .example .row { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 10px 0; border-top: 1px solid var(--line); font-family: var(--font-serif); font-size: 14.5px; }
+  .example .row:last-child { border-bottom: 1px solid var(--line); }
+  .example .row .k { color: var(--accent); font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .theme-toggle { position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px; }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Встреча 5</div>
+  <h1>Модель найма цифрового сотрудника</h1>
+  <p class="lede">По этой модели нанимается любой цифровой сотрудник - неважно, ассистент это, продажник или аналитик. Освоив её один раз, дальше нанимаешь следующих сам.</p>
+
+  <div class="chain">
+    <div class="link">
+      <span class="rn">1</span>
+      <div>
+        <h3>Роль</h3>
+        <p>Должностная инструкция: что сотрудник смотрит, что считает важным, каким тоном докладывает.</p>
+        <div class="q">Вопрос себе: если бы это был человек - как звучала бы вакансия?</div>
+      </div>
+    </div>
+    <div class="link">
+      <span class="rn">2</span>
+      <div>
+        <h3>Отчёт</h3>
+        <p>Короткая сводка с главным наверху, не свалка данных.</p>
+        <div class="q">Вопрос себе: что именно должно быть в первой строке доклада?</div>
+      </div>
+    </div>
+    <div class="link">
+      <span class="rn">3</span>
+      <div>
+        <h3>Канал</h3>
+        <p>Доклад приходит сам в мессенджер, не ждёт, пока откроют.</p>
+        <div class="q">Вопрос себе: где я реально это увижу вовремя - Telegram, почта, оба?</div>
+      </div>
+    </div>
+    <div class="link">
+      <span class="rn">4</span>
+      <div>
+        <h3>Рабочий день</h3>
+        <p>Запуск по расписанию, каждый раз сам, без напоминаний.</p>
+        <div class="q">Вопрос себе: как часто и в какое время нужен этот сотрудник?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="example">
+    <h2>Пример: ИИ-бухгалтер Mg</h2>
+    <div class="name">Второй цифровой сотрудник курса, на том же стеке, что и личный ассистент</div>
+    <div class="row"><span class="k">Роль</span><span>Консультирует клиента по налогам, квалифицирует лида, ведёт к встрече - не консультант, продавец</span></div>
+    <div class="row"><span class="k">Отчёт</span><span>Кто написал, какой вопрос, насколько горячий лид</span></div>
+    <div class="row"><span class="k">Канал</span><span>Telegram / сайт, работает 24/7</span></div>
+    <div class="row"><span class="k">Рабочий день</span><span>Отвечает мгновенно на входящие, не по расписанию</span></div>
+  </div>
+
+  <div id="employees"></div>
+
+  <button class="add-employee-btn" id="addEmployeeBtn" type="button">+ Добавить ещё одного сотрудника</button>
+  <div class="save-hint">Всё, что впишешь, сохраняется только в этом браузере - никуда не отправляется.</div>
+
+  <template id="employeeTemplate">
+    <div class="fill" data-employee>
+      <h2><span class="title-text">Собери своего сотрудника</span><button class="remove-btn" type="button">Убрать</button></h2>
+      <div class="field"><label>Роль - что продаёт / делает, кому, на каком языке</label><div class="line" contenteditable="true" data-field="role" data-placeholder="Например: квалифицирует лидов на входе, отвечает по-русски"></div></div>
+      <div class="field"><label>Отчёт - что считается "горячим" сигналом, как об этом докладывать</label><div class="line" contenteditable="true" data-field="report" data-placeholder="Например: лид спросил цену - сразу пометка "горячий""></div></div>
+      <div class="field"><label>Канал - куда приходит уведомление</label><div class="line" contenteditable="true" data-field="channel" data-placeholder="Например: Telegram-бот отдела продаж"></div></div>
+      <div class="field"><label>Рабочий день - когда и как часто проверяет входящие</label><div class="line" contenteditable="true" data-field="schedule" data-placeholder="Например: мгновенно на каждое новое сообщение"></div></div>
+    </div>
+  </template>
+
+  <footer>
+    <span>Цифровая команда компании · Встреча 5 из 6</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-prompt-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-prompt-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+
+  var STORAGE_KEY = "цк-hiring-model-employees";
+  var FIELDS = ["role", "report", "channel", "schedule"];
+  var container = document.getElementById("employees");
+  var template = document.getElementById("employeeTemplate");
+
+  function loadEmployees() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch (e) {}
+    return [{ role: "", report: "", channel: "", schedule: "" }];
+  }
+
+  function saveEmployees(data) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function readEmployeesFromDom() {
+    var blocks = container.querySelectorAll("[data-employee]");
+    var data = [];
+    blocks.forEach(function (block) {
+      var entry = {};
+      FIELDS.forEach(function (f) {
+        var el = block.querySelector('[data-field="' + f + '"]');
+        entry[f] = el ? el.textContent : "";
+      });
+      data.push(entry);
+    });
+    return data;
+  }
+
+  function render(data) {
+    container.innerHTML = "";
+    data.forEach(function (entry, idx) {
+      var node = template.content.cloneNode(true);
+      var block = node.querySelector("[data-employee]");
+      block.querySelector(".title-text").textContent = idx === 0 ? "Собери своего сотрудника" : "Сотрудник " + (idx + 1);
+      var removeBtn = block.querySelector(".remove-btn");
+      if (data.length <= 1) {
+        removeBtn.style.display = "none";
+      } else {
+        removeBtn.addEventListener("click", function () {
+          var current = readEmployeesFromDom();
+          current.splice(idx, 1);
+          if (!current.length) current = [{ role: "", report: "", channel: "", schedule: "" }];
+          saveEmployees(current);
+          render(current);
+        });
+      }
+      FIELDS.forEach(function (f) {
+        var el = block.querySelector('[data-field="' + f + '"]');
+        el.textContent = (entry[f] || "").trim() ? entry[f] : "";
+        el.classList.toggle("is-empty", !el.textContent.trim());
+        el.addEventListener("input", function () {
+          if (!this.textContent.trim()) { this.innerHTML = ""; this.classList.add("is-empty"); }
+          else { this.classList.remove("is-empty"); }
+          saveEmployees(readEmployeesFromDom());
+        });
+      });
+      container.appendChild(node);
+    });
+  }
+
+  var employees = loadEmployees();
+  render(employees);
+
+  document.getElementById("addEmployeeBtn").addEventListener("click", function () {
+    var current = readEmployeesFromDom();
+    current.push({ role: "", report: "", channel: "", schedule: "" });
+    saveEmployees(current);
+    render(current);
+  });
+</script>

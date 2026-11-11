@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>Материалы курса · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f5f4f2; --ink: #1c1c1c; --muted: #6f6f6f; --line: #dddad5;
+    --accent: #001aff; --accent-soft: #e9ebff;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121212; --bg-soft: #191919; --ink: #f2f1ee; --muted: #9c9c9c; --line: #333333; --accent: #5b73ff; --accent-soft: #202650; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 56px 16px 80px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
+  h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.1; margin: 0; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; margin: 18px 0 0; }
+  h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 44px 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li a { display: flex; justify-content: space-between; gap: 16px; padding: 14px 4px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 17px; }
+  li a:hover { color: var(--accent); background: var(--accent-soft); }
+  li span { color: var(--muted); font-size: 14px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Цифровая команда компании</p>
+  <h1>Материалы курса</h1>
+  <p class="lede">Трекер, FAQ, промпты и скиллы - всё в одном месте. Страницы открываются прямо в браузере.</p>
+
+  <h2>Прогресс</h2>
+  <ul>
+    <li><a href="tracker.html">Трекер прогресса <span>все встречи</span></a></li>
+    <li><a href="self-check.html">Самодиагностика <span>встречи 5 и 6</span></a></li>
+    <li><a href="plan.html">План внедрения <span>встреча 6</span></a></li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <ul>
+    <li><a href="faq/meeting-1.html">FAQ встречи 1 <span>установка и онбординг</span></a></li>
+    <li><a href="faq/meeting-2.html">FAQ встречи 2 <span>база знаний</span></a></li>
+    <li><a href="faq/meeting-3.html">FAQ встречи 3 <span>мессенджеры, почта</span></a></li>
+    <li><a href="faq/meeting-4.html">FAQ встречи 4 <span>исследователь, соцсети</span></a></li>
+    <li><a href="faq/meeting-5.html">FAQ встречи 5 <span>хуки, расписания, координатор</span></a></li>
+    <li><a href="faq/meeting-6.html">Итоговый FAQ курса <span>встреча 6</span></a></li>
+  </ul>
+
+  <h2>Промпты и шаблоны</h2>
+  <ul>
+    <li><a href="prompts/glossary.html">Словарь терминов <span>встреча 1</span></a></li>
+    <li><a href="prompts/vault-setup.html">Промпт структуры vault <span>встреча 2</span></a></li>
+    <li><a href="prompts/atomize.html">Промпт скилла /atomize <span>встреча 2</span></a></li>
+    <li><a href="prompts/researcher-agent.html">Шаблон researcher-агента <span>встреча 4</span></a></li>
+    <li><a href="prompts/unipile-setup.html">Подключение Unipile (LinkedIn) <span>встреча 4</span></a></li>
+    <li><a href="prompts/post-templates.html">Шаблоны постов <span>встреча 4</span></a></li>
+    <li><a href="prompts/hook-template.html">Шаблон файла хука <span>встреча 5</span></a></li>
+    <li><a href="prompts/hiring-model.html">Модель найма цифрового сотрудника <span>встреча 5</span></a></li>
+  </ul>
+
+  <h2>Скиллы - скачать zip</h2>
+  <ul>
+    <li><a href="https://github.com/mg-digital-hq/digital-team-course/raw/main/skills/onboarding.zip">onboarding <span>встреча 1</span></a></li>
+    <li><a href="https://github.com/mg-digital-hq/digital-team-course/raw/main/skills/daily-log.zip">daily-log <span>встреча 1</span></a></li>
+    <li><a href="https://github.com/mg-digital-hq/digital-team-course/raw/main/skills/telegram-mcp-setup.zip">telegram-mcp-setup <span>встреча 3</span></a></li>
+    <li><a href="https://github.com/mg-digital-hq/digital-team-course/raw/main/skills/whatsapp-mcp-setup.zip">whatsapp-mcp-setup <span>встреча 3</span></a></li>
+    <li><a href="https://github.com/mg-digital-hq/digital-team-course/raw/main/skills/cos-review.zip">cos-review <span>встреча 5</span></a></li>
+  </ul>
+</div>
+</body>
+</html>

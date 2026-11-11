@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>Шаблоны поста · Встреча 4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+    --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+    --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 58ch; margin: 18px 0 0; }
+
+  .progress { display: flex; gap: 8px; margin-top: 36px; }
+  .progress .dot { flex: 1; height: 4px; background: var(--line); border-radius: 2px; }
+  .progress .dot.done { background: var(--accent); }
+
+  .tpl { margin-top: 44px; border: 1px solid var(--line); background: var(--surface); }
+  .tpl-head { padding: 20px 24px; border-bottom: 1px solid var(--line); background: var(--bg-soft); }
+  .tpl-head .letter { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+  .tpl-head h2 { font-size: 22px; margin: 6px 0 10px; }
+  .tpl-head .formula { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+  .tpl-body { padding: 22px 24px; }
+  .tpl-body .best-for { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .example-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .example { font-family: var(--font-serif); font-size: 15px; line-height: 1.65; color: var(--ink); background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 16px 20px; white-space: pre-line; }
+  .example-source { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .checklist { list-style: none; margin: 32px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .checklist li { font-family: var(--font-serif); font-size: 15px; color: var(--ink); display: flex; gap: 12px; align-items: flex-start; }
+  .checklist .box { width: 16px; height: 16px; border: 1px solid var(--accent); flex: none; margin-top: 3px; }
+
+  .after { margin-top: 40px; padding: 16px 20px; border-left: 3px solid var(--accent); background: var(--accent-soft); }
+  .after p { font-family: var(--font-serif); font-size: 15px; line-height: 1.55; color: var(--ink); margin: 0; }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .theme-toggle { position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px; }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Встреча 4</div>
+  <h1>Три шаблона поста</h1>
+  <p class="lede">Не начинай с чистого листа. Выбери шаблон под свою находку из ресерча и отдай Claude вместе с голосом из "Правил" - он подготовит черновик, тебе останется отредактировать и опубликовать.</p>
+
+  <div class="progress"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div></div>
+
+  <div class="tpl">
+    <div class="tpl-head">
+      <span class="letter">Шаблон А</span>
+      <h2>Извлечённый урок</h2>
+      <span class="formula">Hook → Ошибка → Урок → Выводы → Вопрос</span>
+    </div>
+    <div class="tpl-body">
+      <p class="best-for">Лучше всего для: истории про ошибку клиента или свою, из которой вытекает практический урок.</p>
+      <p class="example-label">Похожий пример из практики Mg</p>
+      <div class="example">📌 Предприниматель открыл компанию в Грузии, затем ещё одну в Эстонии. Через несколько месяцев выяснилось, что он мог пропустить одно обязательное уведомление.
+
+Речь о КИК (контролируемых иностранных компаниях).
+
+Многие узнают об этой обязанности уже после регистрации бизнеса за рубежом. При этом размер компании здесь не имеет значения - требования могут распространяться и на небольшие проекты.
+
+Как бы вы поступили в такой ситуации?</div>
+      <p class="example-source">Канал Mg | Global Accounting, пост от 13.07.2026</p>
+    </div>
+  </div>
+
+  <div class="tpl">
+    <div class="tpl-head">
+      <span class="letter">Шаблон Б</span>
+      <h2>Курируемый инсайт</h2>
+      <span class="formula">Я нашёл X → 3 инсайта → Моё мнение → А что видите вы</span>
+    </div>
+    <div class="tpl-body">
+      <p class="best-for">Лучше всего для: разбора изменения (закона, рынка, правила) через 3 конкретных пункта.</p>
+      <p class="example-label">Реальный пример из практики Mg - почти дословное совпадение со структурой</p>
+      <div class="example">🇨🇾 Кипр тихо провёл самую выгодную налоговую реформу за последние годы. Разбираем что изменилось с 2026.
+
+Три главных изменения:
+
+1️⃣ Отменён DDD (Deemed Dividend Distribution)
+Раньше: если компания не распределяла прибыль акционерам - государство всё равно облагало её налогом как будто дивиденды были выплачены.
+Теперь: DDD полностью отменён для прибыли начиная с 2026 года.
+
+2️⃣ SDC на дивиденды снижен с 17% до 5%
+
+3️⃣ Гербовый сбор отменён с 1 января 2026
+
+Для кого это критично: холдинги которые держат прибыль для реинвестирования, IT-компании с кипрской структурой.
+
+👉 Если у вас кипрская структура - самое время пересмотреть стратегию.</div>
+      <p class="example-source">Канал Mg | Global Accounting, пост от 05.06.2026</p>
+    </div>
+  </div>
+
+  <div class="tpl">
+    <div class="tpl-head">
+      <span class="letter">Шаблон В</span>
+      <h2>Как я делаю X</h2>
+      <span class="formula">Проблема → Мой сетап (3 шага) → Результат → Скриншот</span>
+    </div>
+    <div class="tpl-body">
+      <p class="best-for">Лучше всего для: показать свой процесс или пошаговый метод решения задачи.</p>
+      <p class="example-label">Похожий пример из практики Mg - процесс разложен на этапы</p>
+      <div class="example">ОАЭ: корпоративный налог 2026. Подготовка - это процесс, а не дедлайн 📊
+
+Ключевая ошибка, которую мы видим - восприятие подачи как одного действия. На практике это последовательная система шагов, где каждый этап влияет на следующий.
+
+Этап 1. Анализ
+→ Расчёт выручки
+→ Проверка рыночности сделок
+→ Оценка ставки 0% (QFZP)
+
+Этап 2. Комплаенс
+→ Финансовая отчётность и расчёт налога
+→ Аудит
+→ Подача декларации и уплата налога
+
+Если начинать в августе - вы не успеваете. Если начинать сейчас - процесс становится управляемым.</div>
+      <p class="example-source">Канал Mg | Global Accounting, пост от 04.05.2026</p>
+    </div>
+  </div>
+
+  <div class="after">
+    <p>Скажи Claude: "Подготовь пост про [тема] по шаблону [А/Б/В] и моим голосом из SOUL.md". До 1300 символов, без хештегов в теле текста, максимум 3 хештега в конце.</p>
+  </div>
+
+  <ul class="checklist">
+    <li><span class="box"></span><span>Claude готовит черновик на основе находок из ресерча и голоса из "Правил"</span></li>
+    <li><span class="box"></span><span>Ты редактируешь - это твоё имя под постом, сделай похожим на себя</span></li>
+    <li><span class="box"></span><span>Публикация через Unipile: "Опубликуй этот пост в моём LinkedIn"</span></li>
+  </ul>
+
+  <footer>
+    <span>Цифровая команда компании · Встреча 4 из 6</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-prompt-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-prompt-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+</script>

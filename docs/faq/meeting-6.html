@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>FAQ · Встреча 6 · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f5f4f2;
+    --surface: #ffffff;
+    --ink: #1c1c1c;
+    --muted: #6f6f6f;
+    --line: #dddad5;
+    --accent: #001aff;
+    --accent-soft: #e9ebff;
+    --warn: #b5551f;
+    --warn-soft: #fbeee4;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --bg-soft: #191919;
+    --surface: #1b1b1b;
+    --ink: #f2f1ee;
+    --muted: #9c9c9c;
+    --line: #333333;
+    --accent: #5b73ff;
+    --accent-soft: #202650;
+    --warn: #e08a4f;
+    --warn-soft: #2b1f16;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650; --warn: #e08a4f; --warn-soft: #2b1f16;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  html { scroll-behavior: smooth; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 58ch; margin: 18px 0 0; }
+
+  .tabs { display: flex; gap: 10px; margin-top: 36px; border-bottom: 1px solid var(--line); }
+  .tabs a {
+    font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; padding: 12px 4px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabs a:hover, .tabs a:focus { color: var(--accent); border-color: var(--accent); }
+
+  section.group { margin-top: 52px; }
+  .group h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+  .group .group-note { font-family: var(--font-serif); color: var(--muted); font-size: 15px; margin: 6px 0 26px; max-width: 58ch; }
+
+  .meeting-block { margin-top: 36px; }
+  .meeting-block:first-of-type { margin-top: 26px; }
+  .meeting-block h3 {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+    border-bottom: 1px solid var(--line); padding-bottom: 10px; margin: 0 0 14px;
+  }
+
+  .qa { border: 1px solid var(--line); background: var(--surface); margin-bottom: 14px; }
+  .qa-head {
+    all: unset;
+    box-sizing: border-box;
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    cursor: pointer; padding: 18px 22px;
+    font-family: var(--font-display); font-weight: 600; font-size: 15.5px; color: var(--ink);
+  }
+  .qa-head .idx { font-family: var(--font-serif); color: var(--accent); font-size: 18px; flex: none; width: 22px; }
+  .qa-head .plus { margin-left: auto; font-family: var(--font-serif); font-size: 20px; color: var(--muted); transition: transform .2s; flex: none; }
+  .qa.open .qa-head .plus { transform: rotate(45deg); }
+
+  .qa .body { display: none; padding: 0 22px 22px 58px; }
+  .qa.open .body { display: block; }
+  .qa .body p { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); margin: 0; }
+  .qa .body a { color: var(--accent); }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  .theme-toggle {
+    position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px;
+  }
+
+  @media print {
+    :root, :root[data-theme="dark"] {
+      --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+      --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff; --warn: #b5551f; --warn-soft: #fbeee4;
+    }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html, body { background: #fff; }
+    .theme-toggle, .tabs { display: none !important; }
+    .qa { break-inside: avoid; page-break-inside: avoid; }
+    .qa .body { display: block !important; }
+    .qa-head { cursor: default; }
+    .qa-head .plus { display: none; }
+    #part2 { break-before: page; page-break-before: always; }
+    .meeting-block { break-inside: avoid-page; }
+    @page { margin: 0.65in; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Встреча 6</div>
+  <h1>Итоговый FAQ: разбор и ответы за весь курс</h1>
+  <p class="lede">Часть 1 - общие вопросы о подходе и курсе целиком. Часть 2 - технические проблемы и типичные ошибки по каждой из пяти предыдущих встреч.</p>
+
+  <nav class="tabs">
+    <a href="#part1">Часть 1 · Общие вопросы</a>
+    <a href="#part2">Часть 2 · По встречам</a>
+  </nav>
+
+  <section class="group" id="part1">
+    <h2>Часть 1. Общие вопросы о курсе и подходе</h2>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">01</span>У меня/у компании несколько разных направлений или проектов. Как всё это организовать, чтобы ассистент не путался?<span class="plus">+</span></button>
+      <div class="body"><p>Заведи одну мета-папку с общим файлом-инструкцией на корневом уровне - там описание всех направлений и где что лежит. Внутри - подпапки по смысловым кластерам, каждая со своей структурой. Например, всё, что касается продаж - в одной подпапке с CRM/outbound/meetings внутри неё.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">02</span>Какой уровень подписки Claude мне нужен и как понять, что я трачу токены впустую?<span class="plus">+</span></button>
+      <div class="body"><p>Базового уровня подписки достаточно для личной продуктивности без кодинга. Если интенсивно готовишь контент - понадобится уровень выше. Чтобы понять, куда уходят токены, попроси сам Claude Code проанализировать историю твоих разговоров и найти точки утечки - например, хук, который срабатывает слишком часто.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">03</span>Как понять, что сторонний MCP-сервер безопасно ставить?<span class="plus">+</span></button>
+      <div class="body"><p>Два уровня защиты. Первый - попроси сам Claude сделать security review репозитория перед установкой. Второй - не отключай permission-подтверждение по умолчанию, это вторая линия защиты, даже если review прошёл чисто. Практическое правило: не ставь пакеты младше 7 дней с момента публикации, лучше 30 - за это время сообщество успевает найти уязвимости, если они есть.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">04</span>Что делать, если нужному сервису нет отдельного MCP-подключения?<span class="plus">+</span></button>
+      <div class="body"><p>Используй браузерную автоматизацию как universal fallback - попроси Claude Code открыть сайт и сделать то же самое руками через браузер. Медленнее прямого API-подключения, но закрывает почти все случаи, где готового MCP ещё не существует.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">05</span>Можно ли собирать презентации целиком с помощью Claude Code?<span class="plus">+</span></button>
+      <div class="body"><p>Да, рабочий путь такой: ресерч → MD-файл с описанием каждого слайда (title, подзаголовок, мысль, что визуально показать) → официальный pptx-скилл превращает это в файл → финальная вычитка глазами. Самое слабое место - подбор картинок с внешних сайтов, здесь ИИ пока справляется хуже всего, картинки часто приходится подбирать самому.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">06</span>Почему ИИ иногда "тупит" или как будто забывает то, что обсуждали в начале длинного разговора?<span class="plus">+</span></button>
+      <div class="body"><p>Две причины. Первая - сжатие контекста (compaction): когда разговор становится слишком длинным, часть деталей теряется при автоматическом сжатии, лучше делать это вручную с явным фокусом на важном. Вторая - на очень длинных разговорах модель объективно хуже помнит середину диалога, чем начало и конец. Если разговор становится критически важным и длинным - начинай новую сессию с кратким резюме, а не тяни старую до бесконечности.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">07</span>Что делать, если застрял с Claude Code и не можешь решить задачу?<span class="plus">+</span></button>
+      <div class="body"><p>Если бьёшься с одной моделью 30-60 минут без результата - подключи вторую точку зрения, другую модель. Не нужно упорствовать в одиночку с одним и тем же инструментом.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">08</span>Можно ли полностью доверять ИИ в узкой профессиональной области - например, в налогах, праве, медицине?<span class="plus">+</span></button>
+      <div class="body"><p>Правило 80/20: 80% объёма работы делай с ассистентом, это быстро. Но финальную проверку в по-настоящему узкой экспертной области отдавай человеку-куратору - особенно пока у тебя самого не наработалась интуиция, в каких именно местах модель начинает "плыть" и выдавать неточности.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">09</span>Не станет ли команда слишком зависимой от ИИ?<span class="plus">+</span></button>
+      <div class="body"><p>Риск реальный, и его стоит держать в голове осознанно: чем больше делегируешь ИИ, тем важнее сознательно оставаться "в контуре" и не терять базовые навыки, которые всё ещё иногда придётся применять самому, без ассистента под рукой.</p></div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">10</span>Курс закончился - что дальше?<span class="plus">+</span></button>
+      <div class="body"><p>Курс закрывает первый шаг - личную продуктивность каждого сотрудника с ИИ. Следующий фронтир, уже за рамками этих шести встреч, - продуктивность всей компании и её процессов целиком. Первый росток этого ты уже видел на встрече 5, в модели "команда агентов, где один раздаёт задачи другим" - именно в эту сторону имеет смысл двигаться дальше, используя план внедрения из Блока 3 встречи 6.</p></div>
+    </div>
+  </section>
+
+  <section class="group" id="part2">
+    <h2>Часть 2. Технические проблемы и типичные ошибки по встречам</h2>
+    <p class="group-note">Собрано по итогам всех пяти встреч - если что-то не завелось, ищи свою встречу ниже.</p>
+
+    <div class="meeting-block">
+      <h3>Встреча 1 · Настройка Claude и онбординг</h3>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">01</span>Установка Claude Code не проходит, что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь, что скачана актуальная версия по ссылке <a href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">code.claude.com/docs/en/desktop</a>, а не со стороннего источника. На Windows иногда требуется обновление PowerShell - если видишь такую ошибку, попроси сам Claude Code подсказать нужную команду обновления.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">02</span>Пытаюсь поставить скилл перетаскиванием zip-архива в чат, а он выдаёт ошибку в духе "принимаются только картинки" - в чём дело?<span class="plus">+</span></button>
+        <div class="body"><p>Это известный баг интерфейса десктоп-версии, не твоя ошибка. Не перетаскивай архив в чат - вручную положи zip-файл в рабочую папку курса через проводник, а затем попроси Claude Code: "поставь скилл из этой папки", указав путь. После установки перезапусти сессию, иначе новая команда не появится.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">03</span>Ассистент видит и пытается использовать какие-то лишние файлы, путается - в чём проблема?<span class="plus">+</span></button>
+        <div class="body"><p>Скорее всего, Claude Code установлен не в отдельной чистой папке под курс, а в папке с рабочими файлами. У ассистента появился доступ к тому, что не относится к курсу. Создай новую чистую папку и работай только в ней.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">04</span>Ассистент отвечает слишком обще, будто вообще не знает меня лично - почему?<span class="plus">+</span></button>
+        <div class="body"><p>Скорее всего, файл-инструкция получилась расплывчатой ("работаю в компании, помогай мне" вместо конкретики). Чем расплывчатее "Правила" - тем более общие ответы даёт модель. Открой файл-инструкцию текстом и перепиши конкретнее: роль, задачи, тон. Или заново пройди онбординг, отвечая максимально развёрнуто.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">05</span>Мне кажется, что онбординг прошёл успешно, но я не уверен, что всё реально работает - как проверить?<span class="plus">+</span></button>
+        <div class="body"><p>Единственный надёжный способ - открыть новую сессию Claude Code в рабочей папке (не ту, где шёл онбординг) и явно спросить "как меня зовут" или "какая у меня роль". Если ответил правильно - всё сработало, если нет - файл-инструкция не подгружается, нужно разбираться заново.</p></div>
+      </div>
+    </div>
+
+    <div class="meeting-block">
+      <h3>Встреча 2 · База знаний компании</h3>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">01</span>Obsidian не устанавливается или не видит папку с заметками - что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь, что при открытии Obsidian ты выбрал именно рабочую папку курса, а не случайно создал новое пустое хранилище. Также убедись, что папки atomic/ и inbox/ реально существуют внутри рабочей папки.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">02</span>Скилл /atomize не находит мою заметку в inbox/ - в чём проблема?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь два момента: файл действительно сохранён в папке inbox/, а не в корне рабочей папки, и у файла расширение .md, а не .txt или .docx.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">03</span>В Obsidian заметки есть, но граф связей пустой - почему?<span class="plus">+</span></button>
+        <div class="body"><p>Граф показывает связи только между заметками, где реально проставлены [[ссылки]] в двойных квадратных скобках. Проверь, что atomize действительно добавил связи, а не просто создал изолированный файл.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">04</span>Мои заметки - это по сути пересказ того, что написал ИИ, а не мои собственные мысли. Это нормально?<span class="plus">+</span></button>
+        <div class="body"><p>Нет, это называется "ловушка коллекционера" - заметок много, но при попытке объяснить своими словами, что в них, не получается. Перечитай заметку и перепиши содержание своими словами; если не получается - значит идея не понята, стоит вернуться к источнику.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">05</span>После того как Claude Code вытащил факты из документов компании в файл-инструкцию, там оказались устаревшие цены или противоречащие друг другу правила - как так?<span class="plus">+</span></button>
+        <div class="body"><p>Скорее всего, сами документы компании были не структурированы или неактуальны. Перед тем как отдавать документы Claude Code, свериться, что это последняя версия. И обязательно вычитывай файл-инструкцию глазами после автоматического добавления фактов.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">06</span>Все мои заметки помечены одним общим тегом вроде "работа", и граф выглядит как один сплошной ком - это проблема?<span class="plus">+</span></button>
+        <div class="body"><p>Да, теряется весь смысл связей - если всё связано со всем, ничего не выделяется как по-настоящему важное. При atomize проси конкретные, узкие теги по темам, а не общие категории.</p></div>
+      </div>
+    </div>
+
+    <div class="meeting-block">
+      <h3>Встреча 3 · Автоматизация календаря, почты, Telegram</h3>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">01</span>Не удаётся создать приложение на my.telegram.org для получения API ID и API Hash - что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Обычно причина в VPN - отключи и попробуй снова. Проверь также, что имя приложения уникальное, не совпадает с уже существующим. Если и это не помогает - попробуй проверенный прокси, например, https://astroproxy.com/, - попроси Claude помочь настроить его (VPN, даже платные, не всегда полностью скрывает IP). Если ничего не работает и номер российский - попроси знакомого за границей сгенерировать API-ключи или используй зарубежный номер.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">02</span>Подключение Telegram не идёт дальше - в чём может быть дело?<span class="plus">+</span></button>
+        <div class="body"><p>Убедись, что установлен Python 3.10 или новее - проверка командой <code>python --version</code>. Без него не запустится скилл telegram-mcp-setup, который ставит нужный пакет через pip.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">03</span>Бот не видит события календаря - в чём проблема?<span class="plus">+</span></button>
+        <div class="body"><p>Чаще всего дело в разовом сбое OAuth-подключения. Отключи и подключи календарь заново.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">04</span>Claude Code не отвечает или зависает при подключении почты/Telegram - что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Чаще всего проблема с VPN - попробуй другой VPN или временно отключи. Заодно проверь интернет-соединение.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">05</span>Дайджест почты присылает нерелевантные категории, приходится всё равно разбирать почту руками - почему?<span class="plus">+</span></button>
+        <div class="body"><p>Скорее всего, автоматизация настроена по общему промпту, а не по твоим реальным категориям из "Before You Automate" Audit (Блок 6 встречи 3). Вернись к этому блоку, заново назови свои реальные категории писем и перепиши промпт Schedule Task под них.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">06</span>Я разрешил Telegram-боту отправлять сообщения "всегда" - это нормально?<span class="plus">+</span></button>
+        <div class="body"><p>Не рекомендуется. Это нарушает принцип "человек в контуре": ассистент может один раз отправить что-то не то или не тому, а ты узнаешь об этом только постфактум. Зайди в настройки разрешений Telegram-подключения и переключи режим отправки обратно на "спрашивать каждый раз" или "только черновик".</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">07</span>Я случайно показал или переслал кому-то session string - что теперь делать?<span class="plus">+</span></button>
+        <div class="body"><p>Действуй быстро: session string - это уже открытая сессия в твоём Telegram, она даже опаснее пароля, потому что не требует повторного подтверждения. Как можно быстрее зайди в настройки Telegram → Устройства → завершить сессию, и переподключи MCP заново с новой строкой.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">08</span>Настроил автоматизацию, но по привычке всё равно продолжаю вручную проверять почту и календарь - это нормально?<span class="plus">+</span></button>
+        <div class="body"><p>Нет, это ровно то, о чём предупреждает принцип "Что перестать делать руками": автоматизация без удаления ручного действия только усложняет систему, а не упрощает. Выключи push-уведомления, договорись с собой не открывать почту вручную минимум неделю.</p></div>
+      </div>
+    </div>
+
+    <div class="meeting-block">
+      <h3>Встреча 4 · ИИ-исследователь</h3>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">01</span>AnySite MCP не подключается или пишет, что превышен лимит запросов - что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь, что подписка активна и не превышен месячный лимит инструментов. Попробуй переподключить MCP заново.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">02</span>Unipile просит войти через cookies, а не через привычный логин-пароль - это нормально?<span class="plus">+</span></button>
+        <div class="body"><p>Да, это штатный альтернативный способ авторизации LinkedIn. Следуй инструкции скилла, не пытайся найти поле для пароля - его там нет намеренно.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">03</span>Я попросил ИИ сразу синтезировать три отчёта субагентов, не делая свой вывод заранее - это плохо?<span class="plus">+</span></button>
+        <div class="body"><p>Да, это пропущенный ключевой шаг метода (Блок 5 встречи 4) - собственное критическое суждение перед тем, как довериться ИИ. Вернись к трём отчётам, сначала письменно сформулируй свой вывод сам, только потом сравни с синтезом ИИ.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">04</span>Опубликовал черновик поста от ассистента почти без правок - это нормально?<span class="plus">+</span></button>
+        <div class="body"><p>Лучше не стоит. Под постом стоит твоё имя, а не имя модели, и читатели это чувствуют, если текст звучит сгенерированно. Обязательно перепиши 2-3 фразы своими словами перед публикацией, особенно первую и последнюю.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">05</span>Стоит ли переживать о лимитах и аккуратности использования AnySite/Unipile?<span class="plus">+</span></button>
+        <div class="body"><p>Да, стоит. Массовые автоматизированные запросы к LinkedIn/Twitter могут привести к временной блокировке аккаунта платформой. Не гони десятки запросов подряд, соблюдай паузы, используй аккуратный темп - это проверено на практике полтора года без блокировок при разумном подходе.</p></div>
+      </div>
+    </div>
+
+    <div class="meeting-block">
+      <h3>Встреча 5 · Цифровая команда</h3>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">01</span>Настроил хук, а он не срабатывает - что делать?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь, что событие (SessionStart, PreCompact и так далее) указано верно, и перезапусти сессию Claude Code после создания хука - изменения конфигурации подхватываются не всегда мгновенно.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">02</span>Schedule Task не запускается по расписанию - в чём может быть дело?<span class="plus">+</span></button>
+        <div class="body"><p>Проверь, что Claude Code запущен на устройстве, где стоит расписание. Также проверь формат времени и часовой пояс.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">03</span>Агент-координатор путает, кому передать задачу - продажнику или ассистенту?<span class="plus">+</span></button>
+        <div class="body"><p>Обычно причина в нечётко описанных ролях. Вернись к Блоку 6 встречи 5 и переформулируй, что именно входит в зону ответственности каждого сотрудника.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">04</span>Хочу сразу собрать полную команду агентов с координатором, а не начинать с отдельных сотрудников - это ошибка?<span class="plus">+</span></button>
+        <div class="body"><p>Скорее да. Координатор прямо назван "потолком возможностей", не обязательным шагом. Сначала доведи ассистента и продажника до стабильной самостоятельной работы, координатора добавляй только когда оба сотрудника работают предсказуемо.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">05</span>Хочу сразу включить полную автономию, не тратя время на контролируемый этап - можно?<span class="plus">+</span></button>
+        <div class="body"><p>Не рекомендуется. Принцип встречи 5 - минимум 10 контролируемых прогонов, прежде чем довериться полной автономии. Если система уже делает неожиданные действия без присмотра - откати её на ручной/полуручной режим и повышай автономию постепенно.</p></div>
+      </div>
+
+      <div class="qa open">
+        <button class="qa-head" type="button"><span class="idx">06</span>Мой контракт из домашки звучит как "буду чаще пользоваться системой" - этого достаточно?<span class="plus">+</span></button>
+        <div class="body"><p>Нет, это слишком расплывчато, такой контракт невозможно однозначно проверить на встрече 6. Перепиши по формуле: "моя система будет [конкретное действие] каждый [период] в [конкретное время] 10 из следующих 14 дней".</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Цифровая команда компании · Встреча 6 из 6</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  document.querySelectorAll(".qa-head").forEach(function (head) {
+    head.addEventListener("click", function () {
+      head.closest(".qa").classList.toggle("open");
+    });
+  });
+
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-faq-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-faq-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+</script>

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>FAQ · Встреча 4 · Цифровая команда компании</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f5f4f2;
+    --surface: #ffffff;
+    --ink: #1c1c1c;
+    --muted: #6f6f6f;
+    --line: #dddad5;
+    --accent: #001aff;
+    --accent-soft: #e9ebff;
+    --warn: #b5551f;
+    --warn-soft: #fbeee4;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --bg-soft: #191919;
+    --surface: #1b1b1b;
+    --ink: #f2f1ee;
+    --muted: #9c9c9c;
+    --line: #333333;
+    --accent: #5b73ff;
+    --accent-soft: #202650;
+    --warn: #e08a4f;
+    --warn-soft: #2b1f16;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650; --warn: #e08a4f; --warn-soft: #2b1f16;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  html { scroll-behavior: smooth; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 58ch; margin: 18px 0 0; }
+
+  .tabs { display: flex; gap: 10px; margin-top: 36px; border-bottom: 1px solid var(--line); }
+  .tabs a {
+    font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; padding: 12px 4px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabs a:hover { color: var(--ink); }
+  .tabs a.tech:hover, .tabs a.tech:focus { border-color: var(--accent); color: var(--accent); }
+  .tabs a.sense:hover, .tabs a.sense:focus { border-color: var(--warn); color: var(--warn); }
+
+  section.group { margin-top: 52px; }
+  .group h2 { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+  .group .group-note { font-family: var(--font-serif); color: var(--muted); font-size: 15px; margin: 6px 0 26px; max-width: 58ch; }
+
+  .qa { border: 1px solid var(--line); background: var(--surface); margin-bottom: 14px; }
+  .qa-head {
+    all: unset;
+    box-sizing: border-box;
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    cursor: pointer; padding: 18px 22px;
+    font-family: var(--font-display); font-weight: 600; font-size: 15.5px; color: var(--ink);
+  }
+  .qa-head .idx { font-family: var(--font-serif); color: var(--accent); font-size: 18px; flex: none; width: 22px; }
+  .group.sense .qa-head .idx { color: var(--warn); }
+  .qa-head .plus { margin-left: auto; font-family: var(--font-serif); font-size: 20px; color: var(--muted); transition: transform .2s; flex: none; }
+  .qa.open .qa-head .plus { transform: rotate(45deg); }
+
+  .qa .body { display: none; padding: 0 22px 22px 58px; }
+  .qa.open .body { display: block; }
+  .qa .body p { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; color: var(--ink); margin: 0 0 10px; }
+  .qa .body ul { margin: 0 0 10px; padding-left: 18px; }
+  .qa .body li { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.6; margin-bottom: 6px; }
+
+  .field { display: flex; gap: 8px; margin: 12px 0; font-size: 12px; }
+  .field .tag { letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); flex: none; padding-top: 2px; }
+  .field .txt { font-family: var(--font-serif); font-size: 15px; color: var(--ink); }
+  .field.why .tag { color: var(--warn); }
+  .field.fix .tag { color: var(--accent); }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  .theme-toggle {
+    position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px;
+  }
+
+  @media print {
+    :root, :root[data-theme="dark"] {
+      --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+      --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff; --warn: #b5551f; --warn-soft: #fbeee4;
+    }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html, body { background: #fff; }
+    .theme-toggle, .tabs { display: none !important; }
+    .qa { break-inside: avoid; page-break-inside: avoid; }
+    .qa .body { display: block !important; }
+    .qa-head { cursor: default; }
+    .qa-head .plus { display: none; }
+    #sense { break-before: page; page-break-before: always; }
+    @page { margin: 0.65in; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Встреча 4</div>
+  <h1>Частые вопросы: исследователь и публикация в соцсетях</h1>
+
+  <nav class="tabs">
+    <a class="tech" href="#tech">Технические проблемы</a>
+    <a class="sense" href="#sense">Типичные смысловые ошибки</a>
+  </nav>
+
+  <section class="group tech" id="tech">
+    <h2>Технические проблемы</h2>
+    <p class="group-note">Что-то реально сломано - зависло, не открылось, выдаёт ошибку.</p>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">01</span>Unipile MCP не подключается или тест не проходит<span class="plus">+</span></button>
+      <div class="body">
+        <p>Аккаунт Unipile и ключ у тебя уже есть со встречи 3 - сегодня добавляем только LinkedIn.</p>
+        <ul>
+          <li>Проверь, что LinkedIn подключён в кабинете Unipile (dashboardv2.unipile.com) - без этого запрос "покажи мои контакты в LinkedIn" ничего не вернёт</li>
+          <li>Если Unipile не виден в Claude Code: команду подключения вставляют в терминал, а не в чат; ключ скопирован полностью, без пробелов и переносов строки</li>
+          <li>Нужен именно scoped Account API key (Overview → Connect my project → MCP → Claude Code), а не Service API key</li>
+          <li>Перезапусти сессию Claude Code и проверь: <code>claude mcp list</code> или <code>/mcp</code> должны показать unipile подключённым</li>
+          <li>Сверь команду подключения - она вставляется одной строкой:</li>
+        </ul>
+        <p style="font-family:monospace; font-size:13px; word-break:break-all; background:var(--bg-soft); border:1px solid var(--line); padding:12px 14px; margin:0;">claude mcp add --transport http --scope user --header "X-API-KEY: ТВОЙ_КЛЮЧ" unipile "https://developer.unipile.com/mcp?branch=v2.0"</p>
+      </div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">02</span>/council зависает или не отвечает<span class="plus">+</span></button>
+      <div class="body">
+        <p>Обычно означает, что запущено слишком много параллельных субагентов одновременно.</p>
+        <div class="field fix"><span class="tag">Решение</span><span class="txt">Попробуй сократить число экспертов в панели.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="group sense" id="sense">
+    <h2>Типичные смысловые ошибки</h2>
+    <p class="group-note">Технически всё работает, но настроено не так, как нужно - и не всегда сразу заметно.</p>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">01</span>Просит ИИ сразу синтезировать три источника, минуя собственный синтез<span class="plus">+</span></button>
+      <div class="body">
+        <div class="field"><span class="tag">Симптом</span><span class="txt">Пропущен Блок 5, смотришь только на итоговый summary ИИ.</span></div>
+        <div class="field why"><span class="tag">Почему плохо</span><span class="txt">Теряется главная ценность метода - собственное критическое суждение перед тем, как довериться ИИ.</span></div>
+        <div class="field fix"><span class="tag">Решение</span><span class="txt">Вернись к трём отчётам, сначала письменно сформулируй свой вывод, только потом сравни с ИИ.</span></div>
+      </div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">02</span>Публикует черновик без редактуры "под себя"<span class="plus">+</span></button>
+      <div class="body">
+        <div class="field"><span class="tag">Симптом</span><span class="txt">Пост звучит как сгенерированный текст, не как личный голос.</span></div>
+        <div class="field why"><span class="tag">Почему плохо</span><span class="txt">Под постом стоит твоё имя, а не имя модели - читатели это чувствуют.</span></div>
+        <div class="field fix"><span class="tag">Решение</span><span class="txt">Обязательно перепиши 2-3 фразы своими словами перед публикацией, особенно первую и последнюю.</span></div>
+      </div>
+    </div>
+
+    <div class="qa open">
+      <button class="qa-head" type="button"><span class="idx">03</span>Не проверяет лимиты и аккуратность использования AnySite/Unipile<span class="plus">+</span></button>
+      <div class="body">
+        <div class="field"><span class="tag">Симптом</span><span class="txt">Аккаунт временно заблокирован платформой за подозрительную активность.</span></div>
+        <div class="field why"><span class="tag">Почему плохо</span><span class="txt">Массовые автоматизированные запросы к LinkedIn/Twitter нарушают правила платформ.</span></div>
+        <div class="field fix"><span class="tag">Решение</span><span class="txt">Не гони десятки запросов подряд, соблюдай паузы, используй аккуратный темп - проверено на практике полтора года без блокировок при разумном подходе.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Цифровая команда компании · Встреча 4 из 6</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  document.querySelectorAll(".qa-head").forEach(function (head) {
+    head.addEventListener("click", function () {
+      head.closest(".qa").classList.toggle("open");
+    });
+  });
+
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-faq-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-faq-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+</script>

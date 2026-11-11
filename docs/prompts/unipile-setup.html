@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<title>Инструкция · Подключение Unipile · Встреча 4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #ffffff; --bg-soft: #f5f4f2; --surface: #ffffff; --ink: #1c1c1c; --muted: #6f6f6f;
+    --line: #dddad5; --accent: #001aff; --accent-soft: #e9ebff;
+    --font-display: "Century Gothic", "Avenir Next", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+    --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212; --bg-soft: #191919; --surface: #1b1b1b; --ink: #f2f1ee; --muted: #9c9c9c;
+      --line: #333333; --accent: #5b73ff; --accent-soft: #202650;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; touch-action: manipulation; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-display); }
+  ::selection { background: var(--accent); color: #fff; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(28px, 6vw, 72px) clamp(18px, 5vw, 24px) 100px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: currentColor; }
+  h1 { font-size: clamp(28px, 4.4vw, 42px); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { font-family: var(--font-serif); color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 58ch; margin: 18px 0 0; }
+  .steps { list-style: none; margin: 32px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .steps li { font-family: var(--font-serif); font-size: 15px; line-height: 1.5; color: var(--ink); display: flex; gap: 12px; }
+  .steps li .n { font-family: var(--font-display); font-weight: 700; color: var(--accent); flex: none; width: 20px; }
+  .code-panel { margin-top: 24px; border: 1px solid var(--line); background: var(--surface); }
+  .code-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--bg-soft); }
+  .code-head .label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .code-head .copy-btn { flex: none; }
+  .copy-btn { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: #fff; background: var(--accent); border: none; padding: 8px 16px; cursor: pointer; transition: opacity .15s; }
+  .copy-btn:hover { opacity: 0.85; }
+  .copy-btn.copied { background: #2f8f5b; }
+  .code-scroll { overflow-x: auto; }
+  pre { margin: 0; padding: 18px 20px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--ink); white-space: pre; }
+  .after { margin-top: 28px; padding: 16px 20px; border-left: 3px solid var(--accent); background: var(--accent-soft); }
+  .after p { font-family: var(--font-serif); font-size: 15px; line-height: 1.55; color: var(--ink); margin: 0; }
+  .after code { font-family: var(--font-mono); font-size: 13px; background: rgba(0,0,0,0.06); padding: 1px 5px; }
+  :root[data-theme="dark"] .after code { background: rgba(255,255,255,0.1); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .after code { background: rgba(255,255,255,0.1); } }
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .theme-toggle { position: fixed; right: 18px; bottom: 18px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-size: 15px; }
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Цифровая команда компании · Встреча 4</div>
+  <h1>Подключение Unipile</h1>
+  <p class="lede">Unipile - сервис-посредник, через который ассистент получает доступ к LinkedIn: читает контакты и публикует посты от твоего имени. Понадобится аккаунт в кабинете Unipile и одна команда в терминале.</p>
+
+  <ol class="steps">
+    <li><span class="n">1</span><span>Зарегистрируйся в кабинете <strong>dashboardv2.unipile.com</strong> (страница /register) - 7 дней пробного периода без карты</span></li>
+    <li><span class="n">2</span><span>Подключи LinkedIn: в кабинете через Hosted Auth выбери LinkedIn и войди в свой аккаунт</span></li>
+    <li><span class="n">3</span><span>Создай ключ доступа: Overview → Connect my project → MCP → Claude Code. Создай приложение (Development application), в нём Scope с подключёнными аккаунтами и ключ для этого Scope - это scoped Account API key. Service API key не подходит</span></li>
+    <li><span class="n">4</span><span>Скопируй команду ниже, вставь свой ключ вместо <code style="font-family:var(--font-mono);">ТВОЙ_КЛЮЧ</code></span></li>
+    <li><span class="n">5</span><span>Вставь готовую команду одной строкой в терминал (не в чат Claude Code) и запусти</span></li>
+  </ol>
+
+  <div class="code-panel">
+    <div class="code-head">
+      <span class="label">Команда подключения</span>
+      <button class="copy-btn" id="copyBtn" type="button">Скопировать</button>
+    </div>
+    <div class="code-scroll"><pre id="promptText">claude mcp add --transport http --scope user --header "X-API-KEY: ТВОЙ_КЛЮЧ" unipile "https://developer.unipile.com/mcp?branch=v2.0"</pre></div>
+  </div>
+
+  <div class="after">
+    <p>Проверка: запусти <code>claude mcp list</code> в терминале или <code>/mcp</code> в Claude Code - unipile должен быть подключён. Затем спроси "покажи мои контакты в LinkedIn". Если не работает - убедись, что ключ скопирован полностью без пробелов и переносов строки, что это scoped Account API key, и перезапусти сессию Claude Code. Публиковать посты и отправлять сообщения - только с твоим подтверждением, сначала черновик.</p>
+  </div>
+
+  <footer>
+    <span>Цифровая команда компании · Встреча 4 из 6</span>
+  </footer>
+</div>
+
+<button class="theme-toggle" id="themeToggle" title="Переключить тему" aria-label="Переключить тему">◐</button>
+<script>
+  var root = document.documentElement;
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("цк-prompt-theme", next); } catch (e) {}
+  });
+  try {
+    var saved = localStorage.getItem("цк-prompt-theme");
+    if (saved) root.setAttribute("data-theme", saved);
+  } catch (e) {}
+
+  var btn = document.getElementById("copyBtn");
+  var promptText = document.getElementById("promptText").textContent;
+  function showCopied() {
+    btn.textContent = "Скопировано";
+    btn.classList.add("copied");
+    setTimeout(function () {
+      btn.textContent = "Скопировать";
+      btn.classList.remove("copied");
+    }, 2000);
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.left = "0";
+    ta.style.fontSize = "16px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var copied = false;
+    try { copied = document.execCommand("copy"); } catch (e) { copied = false; }
+    document.body.removeChild(ta);
+    if (copied) {
+      showCopied();
+    } else {
+      selectVisibleText();
+      btn.textContent = "Текст выделен - скопируй вручную";
+      setTimeout(function () { btn.textContent = "Скопировать"; }, 3000);
+    }
+  }
+  function selectVisibleText() {
+    var pre = document.getElementById("promptText");
+    var range = document.createRange();
+    range.selectNodeContents(pre);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  btn.addEventListener("click", function () {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(promptText).then(showCopied, function () {
+          fallbackCopy(promptText);
+        });
+      } else {
+        fallbackCopy(promptText);
+      }
+    } catch (e) {
+      fallbackCopy(promptText);
+    }
+  });
+</script>
